@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 
 
 const validate = errors => 
@@ -123,4 +123,4 @@ class Login extends React.Component {
  }
 }
 
-ReactDOM.render(<Login />, document.getElementById("root"));
+export default Login;
