@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 public class InterestController {
 
@@ -21,6 +22,8 @@ public class InterestController {
 
     @PostMapping("/createinterest")
     public Interest createInterest(@RequestBody Interest interest) {
+        if (interest.getTitle() == null || interest.getLocation() == null || interest.getDescription() == null) return null;
+
         for (Interest interest1 : this.interestRepository.findAll()) {
             if (interest1.getTitle().equalsIgnoreCase(interest.getTitle())) {
                 return null;

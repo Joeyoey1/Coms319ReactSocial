@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import logo from './logo.svg';
+import { render } from "react-dom";
 import './App.css';
 import Form from './form';
-
-
+import Nav from './components/Navbar'
+import Profile from './components/Profile'
 
 
 
@@ -15,6 +15,8 @@ onSubmit =(fields) => {console.log("App comp got: ", fields)};
     render() {
     return (
     <div className="App">
+        <Nav/>
+        <Profile/>
     <Form onSubmit={fields => this.onSubmit(fields)} />
     </div>
 
