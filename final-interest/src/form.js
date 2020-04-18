@@ -32,7 +32,7 @@ var gname = this.state.groupName;
 var loc = this.state.location;
 var summ = this.state.summary;
 
-const data = { GroupName: this.gname, Location: this.loc, Summary: this.summ};
+const data = { title: this.gname, location: this.loc, description: this.summ};
 
 fetch('http://localhost:8080', {
   method: 'POST', // or 'PUT'
@@ -68,6 +68,7 @@ render() {
 return (
 //create onchange function to edit text field
     <form>
+    <h1>Create Interest Group</h1>
        <input
        name='groupName'
         placeholder="Group Name"
@@ -92,7 +93,8 @@ return (
 
         <br />
 
-     <button onClick={e => this.onSubmit(e)}>Submit</button>
+     <button
+     onClick={e => this.onSubmit(e)}>Submit</button>
     </form>
        );
     }
