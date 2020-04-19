@@ -1,11 +1,11 @@
 import React from "react";
-import CreateUser from "./CreateUser";
 
 export default class Profile extends React.Component {
 
     state = {
         loaded: false,
-        posts: ""
+        posts: "",
+        user: ""
     }
 
     change = (variable, value) => {
@@ -26,25 +26,19 @@ export default class Profile extends React.Component {
             //     displayName: this.props.user.displayName,
             // }
 
-            fetch('http://localhost:8080/posts/', {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(this.props.user)
-            })
+            fetch('http://localhost:8080/user/' + this.props.viewUsername)
                 .then((response) => response.json()).catch((error) => {
                 console.log(error)
             })
                 .then((data) => {
-                    this.change("posts", data);
+                    this.change("user", data);
+                    this.change("posts", this.state.user.posts);
+                    this.change("loaded", true);
                 })
                 .catch(() => {
-                    this.change("error",true);
+                    this.change("error", true);
                 });
-            this.setState({
-                loaded: true,
-            });
+
         }
     }
 
@@ -84,16 +78,15 @@ export default class Profile extends React.Component {
     //TODO Following
     //TODO Friends, mutually following eachother
     render() {
-        if (this.props.logged) {
+        if (this.state.loaded) {
             return (
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-3">
                             <div className="card">
-                                <div className="card-header">{this.props.user.displayName}</div>
+                                <div className="card-header">{this.state.user.displayName}</div>
                                 <div className="card-body">
-                                    <p>Username: {this.props.user.username}</p>
-                                    <p>Password: {this.props.user.password}</p>
+                                    <p>Username: {this.state.user.username}</p>
                                     {/*<p>Password: {this.props.user.password}</p>*/}
                                     {/*<p>Password: {this.props.user.password}</p>*/}
                                     {/*<p>Password: {this.props.user.password}</p>*/}
@@ -108,9 +101,9 @@ export default class Profile extends React.Component {
                 </div>
             );
         } else {
-            return (
-                <CreateUser/>
-            );
+            return (<div>
+                Loading...
+            </div>);
         }
 
     }

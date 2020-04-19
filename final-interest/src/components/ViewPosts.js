@@ -56,13 +56,13 @@ export default class ViewPosts extends React.Component {
             if (typeof this.state.posts !== "string") {
                 var posts = this.state.posts.map((post, i) => {
                     return (
-                        <div className="card" key={i}>
+                        <div className="card my-2" key={i}>
                             <div className="card-header">
-                                {post.title}
+                                <h2>{post.title}</h2>
                             </div>
                             <div className="card-body">
                                 <p>{post.content}</p>
-                                <a href="/#">{post.author.displayName}</a>
+                                <a href="/#" onClick={() => this.props.userClick(post.author.username)}>{post.author.displayName}</a>
                             </div>
                         </div>
                     );

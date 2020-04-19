@@ -17,6 +17,12 @@ export default class UserCreate extends React.Component {
         });
     };
 
+    changeError = (variable, value) => {
+        this.setState({
+            [variable]: value
+        });
+    };
+
     login = (data) => {
         this.props.handleLogin(data);
     }
@@ -30,7 +36,6 @@ export default class UserCreate extends React.Component {
             displayName: String(this.state.sDisplayName)
         };
 
-        let errorHap = false;
 
 
         fetch('http://localhost:8080/createuser', {
@@ -42,11 +47,10 @@ export default class UserCreate extends React.Component {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 this.login(data);
             })
-            .catch((error) => {
-                errorHap = true;
+            .catch(() => {
+                this.changeError("error", true);
             });
 
 
@@ -55,7 +59,6 @@ export default class UserCreate extends React.Component {
             sUsername: "",
             sPassword: "",
             sDisplayName: "",
-            error: errorHap
         });
 
 
@@ -77,7 +80,7 @@ export default class UserCreate extends React.Component {
         return (
             <div className="card">
                 {this.renderError()}
-                <div className="card-body form-inline my-2 my-lg-0">
+                <div className="card-body form-inline my-2 my-lg-0 mx-auto">
                     <input className="form-control mr-sm-2" name="sUsername" type="text" placeholder="Username"
                            value={this.state.sUsername} onChange={event => this.change(event)}/>
                     <input className="form-control mr-sm-2" name="sPassword" type="password" placeholder="Password"

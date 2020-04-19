@@ -17,7 +17,7 @@ public class Post {
     private @Id @GeneratedValue Long id;
     private String title;
     private String content;
-    @JsonIgnoreProperties("posts")
+    @JsonIgnoreProperties({"followers", "posts", "following", "password"})
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private User author;
 

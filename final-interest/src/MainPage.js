@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import CreateUser from "./components/CreateUser";
 import CreatePost from "./components/CreatePost";
 import ViewPosts from "./components/ViewPosts";
+import OtherUser from "./components/OtherUser";
 
 export default class MainPage extends React.Component {
 
@@ -13,7 +14,8 @@ export default class MainPage extends React.Component {
     state = {
         currentView: "main",
         currentUser: {username: "", password: "", displayName: ""},
-        loggedIn: false
+        loggedIn: false,
+        viewUsername: ""
     }
 
     change = (e) => {
@@ -34,8 +36,14 @@ export default class MainPage extends React.Component {
         });
     }
 
-    interestSearch = (phrase) => {
+    handleUserClick = (username) => {
+        this.setState({
+            currentView: "userView",
+            viewUsername: username
+        });
+    }
 
+    interestSearch = (phrase) => {
     }
 
     currentPageLoader() {
@@ -47,9 +55,11 @@ export default class MainPage extends React.Component {
             case "createAccount":
                 return (<CreateUser handleLogin={this.handleLogin}/>);
             case "createPost":
-                return (<CreatePost user={this.state.currentUser} logged={this.state.loggedIn}/>);
+                return (<CreatePost user={this.state.currentUser} logged={this.state.loggedIn} pageChange={this.pageChange}/>);
             case "posts":
-                return (<ViewPosts/>);
+                return (<ViewPosts userClick={this.handleUserClick}/>);
+            case "userView":
+                return (<OtherUser viewUsername={this.state.viewUsername}/>);
             default:
                 return (<Profile logged={this.state.loggedIn} user={this.state.currentUser}/>);
         }

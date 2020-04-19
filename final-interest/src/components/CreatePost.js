@@ -16,6 +16,12 @@ export default class CreatePost extends React.Component {
         });
     };
 
+    changeError = (variable, value) => {
+        this.setState({
+            [variable]: value
+        });
+    };
+
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -28,8 +34,6 @@ export default class CreatePost extends React.Component {
             author: null
         };
 
-        let errorHap = false;
-        console.log(JSON.stringify(data));
         fetch('http://localhost:8080/posts/newpost/' + this.props.user.id, {
             method: 'POST', // or 'PUT'
             headers: {
@@ -38,12 +42,12 @@ export default class CreatePost extends React.Component {
             body: JSON.stringify(data)
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
+            .then(() => {
+                this.props.pageChange("posts")
             })
             .catch((error) => {
-                errorHap = true;
-                console.log(error)
+                this.changeError("error", true);
+                console.log(error);
             });
 
 
@@ -51,9 +55,7 @@ export default class CreatePost extends React.Component {
         this.setState({
             title: "",
             content: "",
-            error: errorHap
         });
-
 
     };
 
@@ -73,12 +75,12 @@ export default class CreatePost extends React.Component {
         return (
             <div className="card">
                 {this.renderError()}
-                <div className="card-body form-inline my-2 my-lg-0">
-                    <input className="form-control mr-sm-2" name="title" type="text" placeholder="Title"
+                <div className="card-body my-2 my-lg-0">
+                    <input className="form-control my-2 mr-sm-2" name="title" type="text" placeholder="Title"
                            value={this.state.title} onChange={event => this.change(event)}/>
-                    <textarea className="form-control mr-lg-2" name="content" placeholder="Content"
+                    <textarea className="form-control my-2 mr-lg-2" name="content" placeholder="Content"
                            value={this.state.content} onChange={event => this.change(event)}/>
-                    <button className="btn btn-outline-primary my-2 my-sm-0" type="submit"
+                    <button className="btn btn-outline-primary my-2 my-sm-2" type="submit"
                             onClick={event => this.onSubmit(event)}>Create Post
                     </button>
                 </div>

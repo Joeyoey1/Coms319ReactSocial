@@ -78,4 +78,27 @@ public class UserController {
         return null;
     }
 
+
+    @PostMapping("/follow/{username}")
+    public void followUser(@RequestBody User user, @PathVariable String username) {
+
+    }
+
+    @GetMapping("/user/{username}")
+    public User getUserByUsername(@PathVariable String username) {
+        User fake = new User();
+        fake.setPassword("");
+        for (User user : this.userRepository.findAll()) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                fake.setUsername(user.getUsername());
+                fake.setDisplayName(user.getDisplayName());
+                fake.setFollowers(user.getFollowers());
+                fake.setPosts(user.getPosts());
+                fake.setFollowing(user.getFollowing());
+                return fake;
+            }
+        }
+        return null;
+    }
+
 }

@@ -47,7 +47,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public List<Post> getPosts() {
-        return this.postRepository.findAll().stream().sorted((p1, p2) -> (int) (p1.getId() - p2.getId())).collect(Collectors.toList());
+        return this.postRepository.findAll().stream().sorted((p1, p2) -> (int) (p2.getId() - p1.getId())).collect(Collectors.toList());
     }
 
 
