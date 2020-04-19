@@ -6,8 +6,10 @@ export default class UserCreate extends React.Component {
         sUsername: "",
         sPassword: "",
         sDisplayName: "",
-        success: false
+        error: false
     }
+
+
 
     change = (e) => {
         this.setState({
@@ -15,12 +17,21 @@ export default class UserCreate extends React.Component {
         });
     };
 
+    login = (data) => {
+        this.props.handleLogin(data);
+    }
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onSubmit(this.state);
 
-        const data = {username: String(this.state.sUsername), password: String(this.state.sPassword), displayName: String(this.state.sDisplayName)};
+        const data = {
+            username: String(this.state.sUsername),
+            password: String(this.state.sPassword),
+            displayName: String(this.state.sDisplayName)
+        };
+
+        let errorHap = false;
+
 
         fetch('http://localhost:8080/createuser', {
             method: 'POST', // or 'PUT'
@@ -31,10 +42,11 @@ export default class UserCreate extends React.Component {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log('Success:', data);
+                console.log(data);
+                this.login(data);
             })
             .catch((error) => {
-                console.error('Error:', error);
+                errorHap = true;
             });
 
 
@@ -43,43 +55,40 @@ export default class UserCreate extends React.Component {
             sUsername: "",
             sPassword: "",
             sDisplayName: "",
+            error: errorHap
         });
 
 
     };
 
+    renderError() {
+        if (this.state.error) {
+            return (
+                <div id="creation error">
+                    <span className="error text-danger">Error creating account! Please retry or contact support!</span>
+                    <br/>
+                </div>
+            );
+        }
+    }
+
 
     render() {
         return (
-            <form>
-                <h1>Create New User</h1>
-                <input
-                    name='username'
-                    placeholder="Username"
-                    value={this.state.sUsername}
-                    onChange={e => this.change(e)}/>
-                <br/>
-
-                <input
-                    name='password'
-                    placeholder="Password"
-                    value={this.state.sPassword}
-                    onChange={e => this.change(e)}/>
-
-                <br/>
-
-                <input
-                    name='displayName'
-                    placeholder="DisplayName"
-                    value={this.state.sDisplayName}
-                    onChange={e => this.change(e)}/>
-
-                <br/>
-
-                <button
-                    onClick={e => this.onSubmit(e)}>Submit
-                </button>
-            </form>
+            <div className="card">
+                {this.renderError()}
+                <div className="card-body form-inline my-2 my-lg-0">
+                    <input className="form-control mr-sm-2" name="sUsername" type="text" placeholder="Username"
+                           value={this.state.sUsername} onChange={event => this.change(event)}/>
+                    <input className="form-control mr-sm-2" name="sPassword" type="password" placeholder="Password"
+                           value={this.state.sPassword} onChange={event => this.change(event)}/>
+                    <input className="form-control mr-sm-2" name="sDisplayName" type="text" placeholder="DisplayName"
+                           value={this.state.sDisplayName} onChange={event => this.change(event)}/>
+                    <button className="btn btn-outline-primary my-2 my-sm-0" type="submit"
+                            onClick={event => this.onSubmit(event)}>Create Account
+                    </button>
+                </div>
+            </div>
         );
     }
 

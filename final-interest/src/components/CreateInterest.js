@@ -1,37 +1,29 @@
 import React from 'react';
-import './form.css';
 
-export default class Form extends React.Component {
-//holds values for what the user inputs
+export default class CreateInterest extends React.Component {
+
     state = {
         groupName: "",
         location: "",
         summary: "",
-
     }
 
     change = (e) => {
-//UNCOMMENT THE LINE BELOW WHEN SWITCHING APP CODE
-//this.props.onChange({[e.target.name]: e.target.value});
+
         this.setState({
             [e.target.name]: e.target.value
         });
     };
 
-//click submit and display results to console
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onSubmit(this.state);
 
-//this.state is the object with the three values
+        const data = {
+            title: String(this.state.groupName),
+            location: String(this.state.location),
+            description: String(this.state.summary)
+        };
 
-        //console.log(this.state);
-
-//SEND OBJECT TO THE SERVER
-
-        const data = {title: String(this.state.groupName), location: String(this.state.location), description: String(this.state.summary)};
-        console.log(JSON.stringify(data));
-        console.log(this.state);
         fetch('http://localhost:8080/createinterest', {
             method: 'POST', // or 'PUT'
             headers: {
@@ -59,10 +51,8 @@ export default class Form extends React.Component {
     };
 
 
-//refresh and keep the values in state
     render() {
         return (
-//create onchange function to edit text field
             <form>
                 <h1>Create Interest Group</h1>
                 <input
@@ -70,7 +60,6 @@ export default class Form extends React.Component {
                     placeholder="Group Name"
                     value={this.state.groupName}
                     onChange={e => this.change(e)}/>
-
                 <br/>
 
                 <input
@@ -78,7 +67,6 @@ export default class Form extends React.Component {
                     placeholder="Location"
                     value={this.state.location}
                     onChange={e => this.change(e)}/>
-
                 <br/>
 
                 <input
@@ -86,7 +74,6 @@ export default class Form extends React.Component {
                     placeholder="Summary"
                     value={this.state.summary}
                     onChange={e => this.change(e)}/>
-
                 <br/>
 
                 <button

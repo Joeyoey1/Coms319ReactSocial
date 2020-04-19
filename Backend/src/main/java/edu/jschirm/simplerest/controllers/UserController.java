@@ -66,7 +66,7 @@ public class UserController {
      * @param attempt
      * @return either the successfully logged in user object or a failed login null.
      */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public User attemptLogin(@RequestBody User attempt) {
         for (User user : this.userRepository.findAll()) {
             if (user.getUsername().equalsIgnoreCase(attempt.getUsername())) {
