@@ -29,25 +29,19 @@ export default class ViewPosts extends React.Component {
 
     componentDidMount() {
         this.getPosts();
-        console.log(this.state.posts);
     }
 
     getPosts() {
         if (!this.state.loaded) {
-            let errorMaybe = false;
             fetch('http://localhost:8080/posts/')
                 .then((response) => response.json())
                 .then((data) => {
-                    //console.log(data);
                     this.change("posts", data);
+                    this.change("loaded", true);
                 })
-                .catch((error) => {
-                    errorMaybe = true;
+                .catch(() => {
+                    this.change("error", true);
                 });
-            this.setState({
-                loaded: true,
-                error: errorMaybe
-            });
         }
     }
 
@@ -62,7 +56,15 @@ export default class ViewPosts extends React.Component {
                             </div>
                             <div className="card-body">
                                 <p>{post.content}</p>
-                                <a href="/#" onClick={() => this.props.userClick(post.author.username)}>{post.author.displayName}</a>
+                                <div className="d-flex justify-content-between">
+                                    <a className="mt-2" href="/#"
+                                       onClick={() => this.props.userClick(post.author.username)}>{post.author.displayName}</a>
+                                    <div className="align-self-end ml-auto">
+                                        <button className="btn btn-primary" href="/#"
+                                                onClick={() => this.props.postView(post.id)}>View Post
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     );

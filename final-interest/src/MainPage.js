@@ -7,6 +7,7 @@ import CreateUser from "./components/CreateUser";
 import CreatePost from "./components/CreatePost";
 import ViewPosts from "./components/ViewPosts";
 import OtherUser from "./components/OtherUser";
+import SinglePost from "./components/SinglePost";
 
 export default class MainPage extends React.Component {
 
@@ -15,7 +16,9 @@ export default class MainPage extends React.Component {
         currentView: "main",
         currentUser: {username: "", password: "", displayName: ""},
         loggedIn: false,
-        viewUsername: ""
+        viewUsername: "",
+        postId: 0,
+        searchResult: ""
     }
 
     change = (e) => {
@@ -43,7 +46,22 @@ export default class MainPage extends React.Component {
         });
     }
 
-    interestSearch = (phrase) => {
+    postViewClick = (postId) => {
+        this.setState({
+            currentView: "postView",
+            postId: postId
+        })
+    }
+
+    postSearch = (phrase) => {
+        fetch('http://localhost:8080/posts/search/' + phrase)
+            .then((response) => response.json())
+            .then((data) => {
+                this.change("searchResult", data);
+            })
+            .catch(() => {
+                this.change("searchResult", null);
+            });
     }
 
     currentPageLoader() {
@@ -57,9 +75,11 @@ export default class MainPage extends React.Component {
             case "createPost":
                 return (<CreatePost user={this.state.currentUser} logged={this.state.loggedIn} pageChange={this.pageChange}/>);
             case "posts":
-                return (<ViewPosts userClick={this.handleUserClick}/>);
+                return (<ViewPosts userClick={this.handleUserClick} postView={this.postViewClick}/>);
             case "userView":
                 return (<OtherUser viewUsername={this.state.viewUsername}/>);
+            case "postView":
+                return (<SinglePost userClick={this.handleUserClick} postId={this.state.postId} user={this.state.currentUser} logged={this.state.loggedIn}/>);
             default:
                 return (<Profile logged={this.state.loggedIn} user={this.state.currentUser}/>);
         }
