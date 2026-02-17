@@ -77,6 +77,7 @@ export default class ViewPosts extends React.Component {
     render() {
         return (
             <div>
+                {this.renderError()}
                 <div className="mx-auto col-sm-6">
                     {this.renderPosts()}
                 </div>
